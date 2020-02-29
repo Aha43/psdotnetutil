@@ -1,31 +1,19 @@
 param(
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
-    [string]$repoarea = "D:\dev\rep",
     [switch]$nogit = $false,
     [string]$type = "classlib",
     [switch]$nosln = $false
 )
 
-#
-# Log fx
-#
-function WriteAction {
-    param (
-        [string]$msg
-    )
-    
-    Write-Host $msg -BackgroundColor Gray -ForegroundColor Blue
-}
+[string]$repoarea = $env:DevRepDir
 
-function WriteDryRun {
-    param (
-        [string]$msg
-    )
-    
-    Write-Host ("   dryrun: " + $msg) -BackgroundColor Gray -ForegroundColor Black
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteHostFunctions.ps1")
+
+if (-not $repoarea) {
+    Write-Error "Repository area directory not given: set the DevRepDir env variable"
+    exit 1
 }
-#
 
 [string]$RootDir = ""
 [string]$SolutionDir = ""
@@ -45,20 +33,20 @@ else {
 #
 
 if (-not (Test-Path -Path $repoarea)) {
-    Write-Error ("Repository area directory: " + $repoarea + " does not exists : terminates");
+    Write-Error ("Repository area directory: " + $repoarea + " does not exists");
     exit 1
 }
 
 if ($nosln) {
     if (Test-Path -Path $ProjectDir) {
-        Write-Error ("Project directory: " + $ProjectDir + " exists : terminates")
-        exit 2
+        Write-Error ("Project directory: " + $ProjectDir + " exists")
+        exit 1
     }
 }
 else {
     if (Test-Path -Path $SolutionDir) {
-        Write-Error ("Solution directory: " + $SolutionDir + " exists : terminates")
-        exit 2
+        Write-Error ("Solution directory: " + $SolutionDir + " exists")
+        exit 1
     }
 }
 
