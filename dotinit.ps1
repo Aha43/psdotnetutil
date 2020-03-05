@@ -1,7 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
-    [switch]$nogit = $false,
     [string]$type = "classlib",
     [switch]$nosln = $false
 )
@@ -105,18 +104,15 @@ if (-not $nosln) {
     }
 }
 
-if (-not $nogit) {
-    Write-Host ""
-    WriteAction ("Creates git repository, gitignore file and initial commit in " + $RootDir)
-    if (-not $dryrun) {
-        git.exe init
-        dotnet.exe new gitignore
-        git.exe add .
-        git.exe commit -m 'initial commit'
-    }
-    else {
-        WriteDryRun ("git repository not created")
-    }
+WriteAction ("Creates git repository, gitignore file and initial commit in " + $RootDir)
+if (-not $dryrun) {
+    git.exe init
+    dotnet.exe new gitignore
+    git.exe add .
+    git.exe commit -m 'initial commit'
+}
+else {
+    WriteDryRun ("git repository not created")
 }
 
 #
