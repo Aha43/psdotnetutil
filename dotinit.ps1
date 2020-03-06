@@ -28,7 +28,7 @@ else {
 }
 
 #
-# Test if can make project
+# Test if can make solution / project
 #
 
 if (-not (Test-Path -Path $repoarea)) {
@@ -64,7 +64,6 @@ if (-not $nosln) {
     }
 }
 
-Write-Host ""
 WriteAction ("Creates project directory: " + $ProjectDir)
 if ($dryrun) {
     WriteDryRun ("dryrun: project directory not created")
@@ -77,7 +76,6 @@ if (-not $dryrun) {
     Push-Location $ProjectDir
 }
 
-Write-Host ""
 WriteAction ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
 if (-not $dryrun) {
     dotnet.exe new $type
@@ -123,7 +121,6 @@ if (-not $dryrun) {
     Pop-Location
 }
 
-Write-Host ""
 WriteAction "Project created OK"
 if ($dryrun) {
     WriteDryRun ("not actually created")

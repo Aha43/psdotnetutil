@@ -4,6 +4,7 @@ function WriteAction {
         [string]$msg
     )
     
+    Write-Host ""
     Write-Host $msg -BackgroundColor Gray -ForegroundColor Blue
 }
 
@@ -14,5 +15,3 @@ function WriteDryRun {
     
     Write-Host ("   dryrun: " + $msg) -BackgroundColor Gray -ForegroundColor Black
 }
-
-Write-Host "allo"
