@@ -52,18 +52,18 @@ function New-Dotnet-Project(
 
     if (-not $nosln) {
         Write-Host ""
-        WriteAction ("Creates solution directory: " + $SolutionDir)
+        Write-Action ("Creates solution directory: " + $SolutionDir)
         if ($dryrun) {
-            WriteDryRun ("solution directory not created")
+            Write-Dry-Run ("solution directory not created")
         }
         else {
             New-Item -Path $SolutionDir -ItemType "directory"
         }
     }
 
-    WriteAction ("Creates project directory: " + $ProjectDir)
+    Write-Action ("Creates project directory: " + $ProjectDir)
     if ($dryrun) {
-        WriteDryRun ("dryrun: project directory not created")
+        Write-Dry-Run ("dryrun: project directory not created")
     }
     else {
         New-Item -Path $ProjectDir -ItemType "directory"
@@ -73,12 +73,12 @@ function New-Dotnet-Project(
         Push-Location $ProjectDir
     }
 
-    WriteAction ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
+    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
     if (-not $dryrun) {
         dotnet.exe new $type
     }
     else {
-        WriteDryRun("project not created")
+        Write-Dry-Run("project not created")
     }
 
     if (-not $dryrun) {
@@ -89,17 +89,17 @@ function New-Dotnet-Project(
     if (-not $nosln) {
         [string]$ProjectFile = Join-Path -Path $ProjectDir -ChildPath ($project + ".csproj")
         Write-Host ""
-        WriteAction ("Creates solution file in " + $RootDir + " and adds project file " + $ProjectFile)
+        Write-Action ("Creates solution file in " + $RootDir + " and adds project file " + $ProjectFile)
         if (-not $dryrun) {
             dotnet.exe new sln
             dotnet.exe sln add $ProjectFile
         }
         else {
-            WriteDryRun("solution not created")
+            Write-Dry-Run("solution not created")
         }
     }
 
-    WriteAction ("Creates git repository, gitignore file and initial commit in " + $RootDir)
+    Write-Action ("Creates git repository, gitignore file and initial commit in " + $RootDir)
     if (-not $dryrun) {
         git.exe init
         dotnet.exe new gitignore
@@ -107,7 +107,7 @@ function New-Dotnet-Project(
         git.exe commit -m 'initial commit'
     }
     else {
-        WriteDryRun ("git repository not created")
+        Write-Dry-Run ("git repository not created")
     }
 
     #
@@ -118,8 +118,8 @@ function New-Dotnet-Project(
         Pop-Location
     }
 
-    WriteAction "Project created OK"
+    Write-Action "Project created OK"
     if ($dryrun) {
-        WriteDryRun ("not actually created")
+        Write-Dry-Run ("not actually created")
     }
 }

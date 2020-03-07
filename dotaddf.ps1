@@ -44,9 +44,9 @@ function Add-Dotnet-Project(
         Push-Location $SolutionDir
     }
 
-    WriteAction ("Creates project directory: " + $ProjectDir)
+    Write-Action ("Creates project directory: " + $ProjectDir)
     if ($dryrun) {
-        WriteDryRun ("project directory not created")
+        Write-Dry-Run ("project directory not created")
     }
     else {
         New-Item -Path $ProjectDir -ItemType "directory"
@@ -56,12 +56,12 @@ function Add-Dotnet-Project(
         Push-Location $ProjectDir
     }
 
-    WriteAction ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
+    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
     if (-not $dryrun) {
         dotnet.exe new $type
     }
     else {
-        WriteDryRun("project not created")
+        Write-Dry-Run("project not created")
     }
 
     if (-not $dryrun) {
@@ -69,21 +69,21 @@ function Add-Dotnet-Project(
         Push-Location $SolutionDir
     }
 
-    WriteAction ("Adds project file " + $ProjectFile + " to solution")
+    Write-Action ("Adds project file " + $ProjectFile + " to solution")
     if (-not $dryrun) {
         dotnet.exe sln add $ProjectFile
     }
     else {
-        WriteDryRun("project file not added")
+        Write-Dry-Run("project file not added")
     }
 
-    WriteAction ('Commits new project to git repository')
+    Write-Action ('Commits new project to git repository')
     if (-not $dryrun) {
         git.exe add .
         git.exe commit -m ('added new project ' + $ProjectDir);
     }
     else {
-        WriteDryRun ("Nothing commited to repository")
+        Write-Dry-Run ("Nothing commited to repository")
     }
 
     #
@@ -95,9 +95,9 @@ function Add-Dotnet-Project(
         Pop-Location
     }
 
-    WriteAction "Project created OK"
+    Write-Action "Project created OK"
     if ($dryrun) {
-        WriteDryRun ("not actually created")
+        Write-Dry-Run ("not actually created")
     }
 
     return

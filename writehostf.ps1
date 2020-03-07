@@ -1,5 +1,5 @@
 
-function WriteAction {
+function Write-Action {
     param (
         [string]$msg
     )
@@ -8,7 +8,7 @@ function WriteAction {
     Write-Host $msg -BackgroundColor Gray -ForegroundColor Blue
 }
 
-function WriteDryRun {
+function Write-Dry-Run {
     param (
         [string]$msg
     )
