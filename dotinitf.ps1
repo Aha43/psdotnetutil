@@ -18,8 +18,6 @@ function New-Dotnet-Project(
         }
     }
 
-    Write-Host ("project: " + $project)
-
     [string]$RootDir = ""
     [string]$SolutionDir = ""
     [string]$ProjectDir = ""
