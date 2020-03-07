@@ -2,7 +2,8 @@ function New-Dotnet-Project(
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
     [string]$type = "classlib",
-    [switch]$nosln = $false
+    [switch]$nosln = $false,
+    [switch]$nospace = $false
 ) {
     [string]$repoarea = $env:DevRepDir
 
@@ -10,6 +11,14 @@ function New-Dotnet-Project(
         Write-Error "Repository area directory not given: set the DevRepDir env variable"
         return
     }
+
+    if ($env:DevTopNameSpace) {
+        if (-not $nospace) {
+            $project = ($env:DevTopNameSpace + "." + $project)
+        }
+    }
+
+    Write-Host ("project: " + $project)
 
     [string]$RootDir = ""
     [string]$SolutionDir = ""

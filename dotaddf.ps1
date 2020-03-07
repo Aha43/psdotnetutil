@@ -2,9 +2,16 @@ function Add-Dotnet-Project(
     [Parameter(Mandatory = $true)][string]$solution,
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
+    [switch]$nospace = $false,
     [string]$type = "classlib"
 ) {
     [string]$repoarea = $env:DevRepDir
+
+    if ($env:DevTopNameSpace) {
+        if (-not $nospace) {
+            $solution = ($env:DevTopNameSpace + "." + $solution)
+        }
+    }
 
     [string]$RootDir = ""
     [string]$SolutionDir = ""
