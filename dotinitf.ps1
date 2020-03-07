@@ -1,7 +1,7 @@
 function New-Dotnet-Project(
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
-    [string]$type = "classlib",
+    [string]$type = "webapi",
     [switch]$nosln = $false,
     [switch]$nospace = $false
 ) {
