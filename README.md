@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Functions (New-Dotnet-Project and Add-Dotnet-Project) to make it easier to follow the practice that dotnet core projects are named after their root namespace.
+Functions (`New-Dotnet-Project` and `Add-Dotnet-Project`) aims to make it easier to follow the practice that dotnet core projects are named after their root namespace.
 
 Uses two environment variables DevRepDir and DevRootNameSpace. First is mandatory and tell which directory repositories are in and second is optional and set root namespace. In the examples below DevRepDir is C:\repos and DevRootNameSpace is Org.Macroshaft
 
