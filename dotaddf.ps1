@@ -87,7 +87,7 @@ function Add-Dotnet-Project(
     Write-Action ('Commits new project to git repository')
     if (-not $dryrun) {
         git.exe add .
-        git.exe commit -m ('added new project ' + $ProjectDir);
+        git.exe commit -m ('added new project ' + $project);
     }
     else {
         Write-Dry-Run ("Nothing commited to repository")
