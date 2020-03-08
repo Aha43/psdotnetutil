@@ -6,7 +6,7 @@
 
 Functions (`New-Dotnet-Project` and `Add-Dotnet-Project`) aims to make it easier to follow the practice that dotnet core projects is to be named after their root namespace.
 
-The functions uses two environment variables `DevRepDir` and `DevRootNameSpace`. First is mandatory and tell which directory repositories are in and second is optional and defines a namespace prefix. In the examples below `DevRepDir` is `C:\repos and DevRootNameSpace` is `Org.Macroshaft`.
+The functions uses two environment variables `DevRepDir` and `DevRootNameSpace`. First is mandatory and tell which directory repositories are in and second is optional and defines a namespace prefix. In the examples below `DevRepDir` is `C:\repos` and `DevRootNameSpace` is `Org.Macroshaft`.
 
 ### Making a new dot core project
 
@@ -28,7 +28,7 @@ Result is that a project named `Org.Macroshaft.Amazing.Api.Services` is created 
 
 Dot net core cli and git must be available.
 
-This is yet not made PowerShell module so 'dot source' `define.ps1` to get functions defined, for example:
+This is yet not made PowerShell module so 'dot source' the script `define.ps1` to get functions defined, for example:
 
 ```
 . .\define.ps1
