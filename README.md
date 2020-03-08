@@ -14,7 +14,7 @@ The functions uses two environment variables `DevRepDir` and `DevRootNameSpace`.
 New-Dotnet-Project -project Amazing.Api
 ```
 
-Result is that in `C:\repos` a solution named `Org.Macroshaft.Amazing.Api` is created with a project also named `Org.Macroshaft.Amazing.Api`. The type of the project is by default `webapi`, use option `-type <project-type>` to make dotnet core project of a specific type. If you need to create a project not in the default namespace (here `Org.Macroshaft`) use switch option `-nospace`. The function also initialize a git repository with a default `.gitignore` file and do the first commit. If you only want a report on what will be done but not actually create project use switch option `-dryrun`.
+Result is that in `C:\repos` a solution named `Org.Macroshaft.Amazing.Api` is created with a project also named `Org.Macroshaft.Amazing.Api`. The type of the project is by default `webapi`, use option `-type <project-type>` to make dotnet core project of a specific [type](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new). If you need to create a project not in the default namespace (here `Org.Macroshaft`) use switch option `-nospace`. The function also initialize a git repository with a default `.gitignore` file and do the first commit. If you only want a report on what will be done but not actually create project use switch option `-dryrun`.
 
 ### Adding a dot core project
 
@@ -22,4 +22,14 @@ Result is that in `C:\repos` a solution named `Org.Macroshaft.Amazing.Api` is cr
 Add-Dotnet-Project -solution Amazing.Api -project Services
 ```
 
-Result is that a project named `Org.Macroshaft.Amazing.Api.Services` is created in the solution folder `Org.Macroshaft.Amazing.Api` and added to the solution. The type of the project created with this function is `classlib`, use option `-type <project-type>` to make dotnet core project of a specific type. If solution was created using `New-Dotnet-Project` with `-nospace` switch option you will need to use that option here to. The function will do a commit so you will want to be in a 'clean working tree' state before running this command. If you only want a report on what will be done but not actually create project use switch option `-dryrun`.
+Result is that a project named `Org.Macroshaft.Amazing.Api.Services` is created in the solution folder `Org.Macroshaft.Amazing.Api` and added to the solution. The type of the project created with this function is `classlib`, use option `-type <project-type>` to make dotnet core project of a specific [type](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new). If solution was created using `New-Dotnet-Project` with `-nospace` switch option you will need to use that option here to. The function will do a commit so you will want to be in a 'clean working tree' state before running this command. If you only want a report on what will be done but not actually create project use switch option `-dryrun`.
+
+### Requirements and installation
+
+Dot net core cli and git must be available.
+
+This is yet not made PowerShell module so 'dot source' `define.ps1` to get functions defined, for example:
+
+```
+. .\define.ps1
+```
