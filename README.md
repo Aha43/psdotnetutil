@@ -4,4 +4,4 @@
 
 ## Purpose
 
-Functions (New-Dotnet-Project and Add-Dotnet-Project) to make it easier to follow the dotnet core practice:
+Functions (New-Dotnet-Project and Add-Dotnet-Project) to make it easier to follow the practice that dotnet core projects are named after their root namespace.
