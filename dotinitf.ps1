@@ -3,7 +3,8 @@ function New-Dotnet-Project(
     [switch]$dryrun = $false,
     [string]$type = "webapi",
     [switch]$nosln = $false,
-    [switch]$nospace = $false
+    [switch]$nospace = $false,
+    [switch]$stemsln = $false
 ) {
     [string]$repoarea = $env:DevRepDir
 
@@ -27,6 +28,10 @@ function New-Dotnet-Project(
     }
     else {
         $SolutionDir = Join-Path -Path $repoarea -ChildPath $project
+        if ($stemsln) {
+            $pos = $SolutionDir.LastIndexOf('.')
+            $SolutionDir = $SolutionDir.Substring(0, $pos)
+        }
         $ProjectDir = Join-Path -Path $SolutionDir -ChildPath $project
         $RootDir = $SolutionDir
     }
