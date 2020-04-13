@@ -1,3 +1,7 @@
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\DotProjectInfo.class.ps1")
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteAction.fun.ps1")
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteDryRun.fun.ps1")
+
 function New-Dotnet-Project(
     [Parameter(Mandatory = $true)][string]$project,
     [switch]$dryrun = $false,
@@ -7,34 +11,12 @@ function New-Dotnet-Project(
     [switch]$stemsln = $false
 ) {
     [string]$repoarea = $env:DevRepDir
-
     if (-not $repoarea) {
         Write-Error "Repository area directory not given: set the DevRepDir env variable"
         return
     }
 
-    if ($env:DevTopNameSpace) {
-        if (-not $nospace) {
-            $project = ($env:DevTopNameSpace + "." + $project)
-        }
-    }
-
-    [string]$RootDir = ""
-    [string]$SolutionDir = ""
-    [string]$ProjectDir = ""
-    if ($nosln) {
-        $ProjectDir = Join-Path -Path $repoarea -ChildPath $project
-        $RootDir = $ProjectDir
-    }
-    else {
-        $SolutionDir = Join-Path -Path $repoarea -ChildPath $project
-        if ($stemsln) {
-            $pos = $SolutionDir.LastIndexOf('.')
-            $SolutionDir = $SolutionDir.Substring(0, $pos)
-        }
-        $ProjectDir = Join-Path -Path $SolutionDir -ChildPath $project
-        $RootDir = $SolutionDir
-    }
+    [DotProjectInfo]$info = [DotProjectInfo]::new($project, $nosln, $nospace, $stemsln)
 
     #
     # Test if can make solution / project
@@ -46,14 +28,14 @@ function New-Dotnet-Project(
     }
 
     if ($nosln) {
-        if (Test-Path -Path $ProjectDir) {
-            Write-Error ("Project directory: " + $ProjectDir + " exists")
+        if (Test-Path -Path $info.ProjectDir) {
+            Write-Error ("Project directory: " + $info.ProjectDir + " exists")
             return
         }
     }
     else {
-        if (Test-Path -Path $SolutionDir) {
-            Write-Error ("Solution directory: " + $SolutionDir + " exists")
+        if (Test-Path -Path $info.SolutionDir) {
+            Write-Error ("Solution directory: " + $info.SolutionDir + " exists")
             return
         }
     }
@@ -64,28 +46,28 @@ function New-Dotnet-Project(
 
     if (-not $nosln) {
         Write-Host ""
-        Write-Action ("Creates solution directory: " + $SolutionDir)
+        Write-Action ("Creates solution directory: " + $info.SolutionDir)
         if ($dryrun) {
             Write-Dry-Run ("solution directory not created")
         }
         else {
-            New-Item -Path $SolutionDir -ItemType "directory"
+            New-Item -Path $info.SolutionDir -ItemType "directory"
         }
     }
 
-    Write-Action ("Creates project directory: " + $ProjectDir)
+    Write-Action ("Creates project directory: " + $info.ProjectDir)
     if ($dryrun) {
         Write-Dry-Run ("dryrun: project directory not created")
     }
     else {
-        New-Item -Path $ProjectDir -ItemType "directory"
+        New-Item -Path $info.ProjectDir -ItemType "directory"
     }
 
     if (-not $dryrun) {
-        Push-Location $ProjectDir
+        Push-Location $info.ProjectDir
     }
 
-    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $ProjectDir)
+    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $info.ProjectDir)
     if (-not $dryrun) {
         dotnet.exe new $type
     }
@@ -95,23 +77,22 @@ function New-Dotnet-Project(
 
     if (-not $dryrun) {
         Pop-Location
-        Push-Location $RootDir
+        Push-Location $info.RootDir
     }
 
     if (-not $nosln) {
-        [string]$ProjectFile = Join-Path -Path $ProjectDir -ChildPath ($project + ".csproj")
         Write-Host ""
-        Write-Action ("Creates solution file in " + $RootDir + " and adds project file " + $ProjectFile)
+        Write-Action ("Creates solution file in " + $info.RootDir + " and adds project file " + $info.ProjectFile)
         if (-not $dryrun) {
             dotnet.exe new sln
-            dotnet.exe sln add $ProjectFile
+            dotnet.exe sln add $info.ProjectFile
         }
         else {
             Write-Dry-Run("solution not created")
         }
     }
 
-    Write-Action ("Creates git repository, gitignore file and initial commit in " + $RootDir)
+    Write-Action ("Creates git repository, gitignore file and initial commit in " + $info.RootDir)
     if (-not $dryrun) {
         git.exe init
         dotnet.exe new gitignore
