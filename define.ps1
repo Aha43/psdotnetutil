@@ -2,3 +2,4 @@
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\NewDotnetProject.fun.ps1")
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\AddDotnetProject.fun.ps1")
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\NewSha256BasedSecret.fun.ps1")
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\TestWorkingDirClean.fun.ps1")
