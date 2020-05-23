@@ -3,12 +3,13 @@ function Test-Working-Dir-Clean (
 ) {
     if (-not (Test-Path -Path $dir)) {
         Write-Error ("Working directory: " + $dir + " does not exists");
-        return
+        return $false
     }
 
     [string]$gitDir = Join-Path -Path $dir -ChildPath ".git"
     if (-not (Test-Path -Path $gitDir)) {
         Write-Error ("Working dir do not look like a git repo: missing .git directory")
+        return $false
     }
 
     Push-Location $dir

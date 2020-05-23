@@ -1,6 +1,7 @@
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\DotProjectInfo.class.ps1")
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteAction.fun.ps1")
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteDryRun.fun.ps1")
+. (Join-Path -Path $PSScriptRoot -ChildPath ".\TestWorkingDirClean.fun.ps1")
 
 function Add-Dotnet-Project(
     [Parameter(Mandatory = $true)][string]$solution,
@@ -23,6 +24,11 @@ function Add-Dotnet-Project(
             Write-Error ("Looks like project exists: " + $info.ProjectDir + " (project dir) exists")
             return
         }
+    }
+
+    if (-not (Test-Working-Dir-Clean -dir $info.SolutionDir)) {
+        Write-Error ("Solution directory not clean, commit changes before adding new project")
+        return
     }
 
     #
