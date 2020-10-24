@@ -4,30 +4,32 @@
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\TestWorkingDirClean.fun.ps1")
 
 function Add-Dotnet-Project(
-    [Parameter(Mandatory = $true)][string]$solution,
-    [Parameter(Mandatory = $true)][string]$project,
-    [switch]$dryrun = $false,
-    [switch]$nospace = $false,
-    [string]$type = "classlib"
+    [Parameter(Mandatory = $true)][string]$Solution,
+    [Parameter(Mandatory = $true)][string]$Project,
+    [switch]$Dryrun = $false,
+    [switch]$Nospace = $false,
+    [string]$Type = "classlib"
 ) {
-    [DotProjectInfo]$info = [DotProjectInfo]::new($solution, $project, $nospace)
+    [DotProjectInfo]$info = [DotProjectInfo]::new($Solution, $Project, $Nospace)
 
     if (-not (Test-Path -Path $info.SolutionFile)) {
-        if (-not $dryrun) {
-            Write-Error ("Do not look like a solution: " + $info.SolutionFile + " (solution file) does not exists");
+        if (-not $Dryrun) {
+            Write-Error ("Do not look like a Solution
+    : " + $info.SolutionFile + " (Solution
+     file) does not exists");
             return
         }
     }
 
     if (Test-Path -Path $info.ProjectDir) {
-        if (-not $dryrun) {
-            Write-Error ("Looks like project exists: " + $info.ProjectDir + " (project dir) exists")
+        if (-not $Dryrun) {
+            Write-Error ("Looks like Project exists: " + $info.ProjectDir + " (Project dir) exists")
             return
         }
     }
 
     if (-not (Test-Working-Dir-Clean -dir $info.SolutionDir)) {
-        Write-Error ("Solution directory not clean, commit changes before adding new project")
+        Write-Error ("Solution directory not clean, commit changes before adding new Project")
         return
     }
 
@@ -35,47 +37,47 @@ function Add-Dotnet-Project(
     # Start doing
     #
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Push-Location $info.SolutionDir
     }
 
-    Write-Action ("Creates project directory: " + $info.ProjectDir)
-    if ($dryrun) {
-        Write-Dry-Run ("project directory not created")
+    Write-Action ("Creates Project directory: " + $info.ProjectDir)
+    if ($Dryrun) {
+        Write-Dry-Run ("Project directory not created")
     }
     else {
         New-Item -Path $info.ProjectDir -ItemType "directory"
     }
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Push-Location $info.ProjectDir
     }
 
-    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $info.ProjectDir)
-    if (-not $dryrun) {
-        dotnet.exe new $type
+    Write-Action ("Creates dotnet Project of Type '" + $Type + "' in " + $info.ProjectDir)
+    if (-not $Dryrun) {
+        dotnet.exe new $Type
     }
     else {
-        Write-Dry-Run("project not created")
+        Write-Dry-Run("Project not created")
     }
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Pop-Location
         Push-Location $info.SolutionDir
     }
 
-    Write-Action ("Adds project file " + $info.ProjectFile + " to solution")
-    if (-not $dryrun) {
+    Write-Action ("Adds Project file " + $info.ProjectFile + " to Solution")
+    if (-not $Dryrun) {
         dotnet.exe sln add $info.ProjectFile
     }
     else {
-        Write-Dry-Run("project file not added")
+        Write-Dry-Run("Project file not added")
     }
 
-    Write-Action ('Commits new project to git repository')
-    if (-not $dryrun) {
+    Write-Action ('Commits new Project to git repository')
+    if (-not $Dryrun) {
         git.exe add .
-        git.exe commit -m ('added new project ' + $project);
+        git.exe commit -m ('added new Project ' + $Project);
     }
     else {
         Write-Dry-Run ("Nothing commited to repository")
@@ -85,13 +87,13 @@ function Add-Dotnet-Project(
     # Done
     #
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Pop-Location
         Pop-Location
     }
 
     Write-Action "Project created OK"
-    if ($dryrun) {
+    if ($Dryrun) {
         Write-Dry-Run ("not actually created")
     }
 

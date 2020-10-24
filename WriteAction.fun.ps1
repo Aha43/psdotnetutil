@@ -1,8 +1,8 @@
 function Write-Action {
     param (
-        [string]$msg
+        [string]$Msg
     )
     
     Write-Host ""
-    Write-Host $msg -BackgroundColor Gray -ForegroundColor Blue
+    Write-Host $Msg -BackgroundColor Gray -ForegroundColor Blue
 }

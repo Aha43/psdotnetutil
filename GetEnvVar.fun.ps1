@@ -1,22 +1,22 @@
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\Result.class.ps1")
 
 function Get-Env-Variable(
-    [Parameter(Mandatory = $true)][string]$name,
-    [string]$type = "string"
+    [Parameter(Mandatory = $true)][string]$Name,
+    [string]$Type = "string"
 ) {
     Push-Location Env:  
 
-    [bool]$exists = Test-Path $name
+    [bool]$exists = Test-Path $Name
     
     [Result]$retVal
     if (-not $exists) {
-        $retVal = [Result]::new("Environment variable: " + $name + " not set", $false)
+        $retVal = [Result]::new("Environment variable: " + $Name + " not set", $false)
         Pop-Location
     } else {
-        $item = Get-Item -Path $name
+        $item = Get-Item -Path $Name
         $value = $item.Value
         Pop-Location
-        switch ($type) {
+        switch ($Type) {
             "string" { 
                 $retVal = [Result]::new($value, $true); 
                 Break 
@@ -26,7 +26,7 @@ function Get-Env-Variable(
                     $retVal = [Result]::new($value, $true)
                 }
                 else {
-                    $retVal = [Result]::new("Environment variable: " + $name + " do not refer to a directory", $false)
+                    $retVal = [Result]::new("Environment variable: " + $Name + " do not refer to a directory", $false)
                 }
                 Break
             }
@@ -35,11 +35,11 @@ function Get-Env-Variable(
                     $retVal = [Result]::new($value, $true)
                 }
                 else {
-                    $retVal = [Result]::new("Environment variable: " + $name + " do not refer to a file", $false)
+                    $retVal = [Result]::new("Environment variable: " + $Name + " do not refer to a file", $false)
                 }
                 Break
             }
-            default { $retVal = [Result]::new("Uknown input for type: " + $type, $false)}
+            default { $retVal = [Result]::new("Uknown input for Type: " + $Type, $false)}
         }
     }
     

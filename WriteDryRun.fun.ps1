@@ -1,7 +1,7 @@
 function Write-Dry-Run {
     param (
-        [string]$msg
+        [string]$Msg
     )
     
-    Write-Host ("   dryrun: " + $msg) -BackgroundColor Gray -ForegroundColor Black
+    Write-Host ("   dryrun: " + $Msg) -BackgroundColor Gray -ForegroundColor Black
 }

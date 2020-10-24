@@ -13,18 +13,18 @@ class DotProjectInfo {
     [bool]$HasSolution 
 
     #
-    # Creates name, file and directory information for a dotnet project given a project name and a sultion name for the solution project in.
-    # The solution / project may not actually exists: This information may be used to create project / solution.
+    # Creates name, file and directory information for a dotnet Project given a Project name and a sultion name for the Solution Project in.
+    # The Solution / Project may not actually exists: This information may be used to create Project / Solution.
     #
     DotProjectInfo(
         # Solution name
-        [string]$solution,
+        [string]$Solution,
 
         # Project name
-        [string]$project,
+        [string]$Project,
 
-        # If true project is not in the name space given by environment variable DevTopNameSpace
-        [bool]$nospace
+        # If true Project is not in the name space given by environment variable DevTopNameSpace
+        [bool]$Nospace
     ) {
         $this.HasSolution = $true
 
@@ -34,39 +34,39 @@ class DotProjectInfo {
             return
         }
 
-        $this.SolutionName = $solution
+        $this.SolutionName = $Solution
         if ($env:DevTopNameSpace) {
-            if (-not $nospace) {
-                $this.SolutionName = ($env:DevTopNameSpace + "." + $solution)
+            if (-not $Nospace) {
+                $this.SolutionName = ($env:DevTopNameSpace + "." + $Solution)
             }
         }
     
         $this.SolutionDir = Join-Path -Path $repoarea -ChildPath $this.SolutionName
         $this.SolutionFile = Join-Path -Path $this.SolutionDir -ChildPath ($this.SolutionName + ".sln")
-        $this.ProjectName = $project
-        $this.QualifiedProjectName = ($this.SolutionName + '.' + $project)
+        $this.ProjectName = $Project
+        $this.QualifiedProjectName = ($this.SolutionName + '.' + $Project)
         $this.ProjectDir = Join-Path -Path $this.SolutionDir -ChildPath $this.QualifiedProjectName
         $this.ProjectFile = Join-Path -Path $this.ProjectDir -ChildPath ($this.QualifiedProjectName + ".csproj")
         $this.RootDir = $this.SolutionDir
     }
 
     #
-    # Creates name, file and directory information for a dotnet project given a project name.
-    # The solution / project may not actually exists: This information may be used to create project / solution.
+    # Creates name, file and directory information for a dotnet Project given a Project name.
+    # The Solution / Project may not actually exists: This information may be used to create Project / Solution.
     #
     DotProjectInfo(
         # Project name
-        [string]$project,
+        [string]$Project,
 
-        # If true project is not in a solution
-        [bool]$nosln,
+        # If true Project is not in a Solution
+        [bool]$Nosln,
 
-        # If true project is not in the name space given by environment variable DevTopNameSpace
-        [bool]$nospace,
+        # If true Project is not in the name space given by environment variable DevTopNameSpace
+        [bool]$Nospace,
 
-        # If $false solution name (this value only is used if $nosln is $false) is same as qualified project name.
-        # If $true solution name is stem to project qualified name (if project qualified name is a.b.c then solution name is a.b).
-        [bool]$stemsln
+        # If $false Solution name (this value only is used if $Nosln is $false) is same as qualified Project name.
+        # If $true Solution name is stem to Project qualified name (if Project qualified name is a.b.c then Solution name is a.b).
+        [bool]$Stemsln
     ) {
         [string]$repoarea = $env:DevRepDir
         if (-not $repoarea) {
@@ -74,18 +74,18 @@ class DotProjectInfo {
             return
         }
 
-        $this.ProjectName = $project
-        $this.QualifiedProjectName = $project
-        $this.SolutionName = $project
+        $this.ProjectName = $Project
+        $this.QualifiedProjectName = $Project
+        $this.SolutionName = $Project
 
         if ($env:DevTopNameSpace) {
-            if (-not $nospace) {
-                $this.QualifiedProjectName = ($env:DevTopNameSpace + "." + $project)
+            if (-not $Nospace) {
+                $this.QualifiedProjectName = ($env:DevTopNameSpace + "." + $Project)
                 $this.SolutionName = $this.QualifiedProjectName
             }
         }
     
-        if ($nosln) {
+        if ($Nosln) {
             $this.ProjectDir = Join-Path -Path $repoarea -ChildPath $this.QualifiedProjectName
             $this.RootDir = $this.ProjectDir
             $this.SolutionName = ""
@@ -93,7 +93,7 @@ class DotProjectInfo {
         }
         else {
             $this.SolutionDir = Join-Path -Path $repoarea -ChildPath $this.QualifiedProjectName
-            if ($stemsln) {
+            if ($Stemsln) {
                 $pos = $this.QualifiedProjectName.LastIndexOf('.')
                 $this.SolutionName = $this.QualifiedProjectName.Substring(0, $pos)
                 $pos = $this.SolutionDir.LastIndexOf('.')
@@ -111,12 +111,12 @@ class DotProjectInfo {
 }
 
 function Get-Project-Info(
-    [Parameter(Mandatory = $true)][string]$project,
-    [switch]$nosln = $false,
-    [switch]$nospace = $false,
-    [switch]$stemsln = $false
+    [Parameter(Mandatory = $true)][string]$Project,
+    [switch]$Nosln = $false,
+    [switch]$Nospace = $false,
+    [switch]$Stemsln = $false
 ) {
-    [DotProjectInfo]$info = [DotProjectInfo]::new($project, $nosln, $nospace, $stemsln)
+    [DotProjectInfo]$info = [DotProjectInfo]::new($Project, $Nosln, $Nospace, $Stemsln)
 
     return $info
 }

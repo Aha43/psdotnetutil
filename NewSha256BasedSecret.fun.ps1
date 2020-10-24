@@ -1,8 +1,8 @@
 function New-Sha256Based-Secret(
-    [int]$length = 64
+    [int]$Length = 64
 ) {
     $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
-    $secretBytes = [System.Byte[]]::CreateInstance([System.Byte], $length)
+    $secretBytes = [System.Byte[]]::CreateInstance([System.Byte], $Length)
     $rng.GetBytes($secretBytes)
     $hash256 = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
     $hash = $hash256.ComputeHash($secretBytes)

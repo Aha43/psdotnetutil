@@ -3,12 +3,12 @@
 . (Join-Path -Path $PSScriptRoot -ChildPath ".\WriteDryRun.fun.ps1")
 
 function New-Dotnet-Project(
-    [Parameter(Mandatory = $true)][string]$project,
-    [switch]$dryrun = $false,
-    [string]$type = "webapi",
-    [switch]$nosln = $false,
-    [switch]$nospace = $false,
-    [switch]$stemsln = $false
+    [Parameter(Mandatory = $true)][string]$Project,
+    [switch]$Dryrun = $false,
+    [string]$Type = "webapi",
+    [switch]$Nosln = $false,
+    [switch]$Nospace = $false,
+    [switch]$Stemsln = $false
 ) {
     [string]$repoarea = $env:DevRepDir
     if (-not $repoarea) {
@@ -16,10 +16,10 @@ function New-Dotnet-Project(
         return
     }
 
-    [DotProjectInfo]$info = [DotProjectInfo]::new($project, $nosln, $nospace, $stemsln)
+    [DotProjectInfo]$info = [DotProjectInfo]::new($Project, $Nosln, $Nospace, $Stemsln)
 
     #
-    # Test if can make solution / project
+    # Test if can make solution / Project
     #
 
     if (-not (Test-Path -Path $repoarea)) {
@@ -27,7 +27,7 @@ function New-Dotnet-Project(
         return
     }
 
-    if ($nosln) {
+    if ($Nosln) {
         if (Test-Path -Path $info.ProjectDir) {
             Write-Error ("Project directory: " + $info.ProjectDir + " exists")
             return
@@ -44,10 +44,10 @@ function New-Dotnet-Project(
     # Start doing
     #
 
-    if (-not $nosln) {
+    if (-not $Nosln) {
         Write-Host ""
         Write-Action ("Creates solution directory: " + $info.SolutionDir)
-        if ($dryrun) {
+        if ($Dryrun) {
             Write-Dry-Run ("solution directory not created")
         }
         else {
@@ -55,35 +55,35 @@ function New-Dotnet-Project(
         }
     }
 
-    Write-Action ("Creates project directory: " + $info.ProjectDir)
-    if ($dryrun) {
-        Write-Dry-Run ("dryrun: project directory not created")
+    Write-Action ("Creates Project directory: " + $info.ProjectDir)
+    if ($Dryrun) {
+        Write-Dry-Run ("Dryrun: Project directory not created")
     }
     else {
         New-Item -Path $info.ProjectDir -ItemType "directory"
     }
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Push-Location $info.ProjectDir
     }
 
-    Write-Action ("Creates dotnet project of type '" + $type + "' in " + $info.ProjectDir)
-    if (-not $dryrun) {
-        dotnet.exe new $type
+    Write-Action ("Creates dotnet Project of Type '" + $Type + "' in " + $info.ProjectDir)
+    if (-not $Dryrun) {
+        dotnet.exe new $Type
     }
     else {
-        Write-Dry-Run("project not created")
+        Write-Dry-Run("Project not created")
     }
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Pop-Location
         Push-Location $info.RootDir
     }
 
-    if (-not $nosln) {
+    if (-not $Nosln) {
         Write-Host ""
-        Write-Action ("Creates solution file in " + $info.RootDir + " and adds project file " + $info.ProjectFile)
-        if (-not $dryrun) {
+        Write-Action ("Creates solution file in " + $info.RootDir + " and adds Project file " + $info.ProjectFile)
+        if (-not $Dryrun) {
             dotnet.exe new sln
             dotnet.exe sln add $info.ProjectFile
         }
@@ -93,7 +93,7 @@ function New-Dotnet-Project(
     }
 
     Write-Action ("Creates git repository, gitignore file and initial commit in " + $info.RootDir)
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         git.exe init
         dotnet.exe new gitignore
         git.exe add .
@@ -107,12 +107,12 @@ function New-Dotnet-Project(
     # Done
     #
 
-    if (-not $dryrun) {
+    if (-not $Dryrun) {
         Pop-Location
     }
 
     Write-Action "Project created OK"
-    if ($dryrun) {
+    if ($Dryrun) {
         Write-Dry-Run ("not actually created")
     }
 }
